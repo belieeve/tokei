@@ -217,12 +217,12 @@
 
     if (isCorrect) {
       btn.classList.add('correct');
-      feedbackEl.textContent = 'せいかい！やったね！';
+      feedbackEl.textContent = '🎉 せいかい！やったね！';
       feedbackEl.className = 'feedback ok';
       state.score += 1;
     } else {
       btn.classList.add('wrong');
-      feedbackEl.textContent = 'ざんねん…。つぎは できる！';
+      feedbackEl.textContent = '💡 ざんねん… つぎは できる！';
       feedbackEl.className = 'feedback ng';
       // 正解も表示
       highlightCorrect();
@@ -285,4 +285,3 @@
   // 初期化
   start();
 })();
-

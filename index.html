@@ -22,8 +22,12 @@
       </header>
 
       <section class="stage" aria-live="polite">
-        <p id="question" class="question">この とけい は なんじ？</p>
-        <canvas id="clock" width="320" height="320" aria-label="アナログ時計"></canvas>
+        <p id="question" class="question">❓ この とけい は なんじ？</p>
+        <div class="clock-wrap">
+          <span class="decor decor--star" aria-hidden="true">⭐️</span>
+          <span class="decor decor--heart" aria-hidden="true">💖</span>
+          <canvas id="clock" width="320" height="320" aria-label="アナログ時計"></canvas>
+        </div>
 
         <div id="choices" class="choices" role="group" aria-label="こたえの せんたく"></div>
 
@@ -44,4 +48,3 @@
     <script src="script.js"></script>
   </body>
   </html>
-
