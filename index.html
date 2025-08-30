@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>とけいクイズ - なんじかな？</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header class="app__header">
+        <h1>とけいクイズ ⏰</h1>
+        <div class="controls">
+          <label for="level">レベル:</label>
+          <select id="level" aria-label="レベル選択">
+            <option value="easy">かんたん（じだけ）</option>
+            <option value="quarter">ふつう（15分ごと）</option>
+            <option value="five" selected>がんばる（5分ごと）</option>
+          </select>
+          <button id="resetBtn" class="btn">はじめから</button>
+        </div>
+      </header>
+
+      <section class="stage" aria-live="polite">
+        <p id="question" class="question">この とけい は なんじ？</p>
+        <canvas id="clock" width="320" height="320" aria-label="アナログ時計"></canvas>
+
+        <div id="choices" class="choices" role="group" aria-label="こたえの せんたく"></div>
+
+        <div class="status">
+          <div id="feedback" class="feedback" aria-live="polite"></div>
+          <div class="progress">
+            <span id="progressText">0/10 もんめ</span>
+            <span id="scoreText">せいかい: 0</span>
+          </div>
+        </div>
+      </section>
+
+      <footer class="app__footer">
+        <small>つくったひと: あなた（ゲーム開発者）</small>
+      </footer>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+  </html>
+
