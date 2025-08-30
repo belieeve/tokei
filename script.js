@@ -8,6 +8,7 @@
   const levelSel = document.getElementById('level');
   const resetBtn = document.getElementById('resetBtn');
   const questionEl = document.getElementById('question');
+  const clockWrap = document.querySelector('.clock-wrap');
 
   const TOTAL_QUESTIONS = 10;
 
@@ -56,26 +57,34 @@
     // 背景
     ctx.clearRect(0, 0, w, hgt);
     ctx.save();
-    // 盤面
-    const grad = ctx.createRadialGradient(cx, cy, r * 0.1, cx, cy, r);
+    // 盤面（明るめグラデ）
+    const grad = ctx.createRadialGradient(cx, cy, r * 0.2, cx, cy, r);
     grad.addColorStop(0, '#ffffff');
-    grad.addColorStop(1, '#e9edf5');
+    grad.addColorStop(1, '#f2f6ff');
     ctx.fillStyle = grad;
     ctx.beginPath();
     ctx.arc(cx, cy, r, 0, Math.PI * 2);
     ctx.fill();
-    ctx.lineWidth = 6;
-    ctx.strokeStyle = '#d0d7e5';
+    // 外枠のカラフルリング（キャンディ風）
+    const ring = ctx.createLinearGradient(0, 0, w, 0);
+    ring.addColorStop(0, '#ff9a9e');
+    ring.addColorStop(0.25, '#fad0c4');
+    ring.addColorStop(0.5, '#a1c4fd');
+    ring.addColorStop(0.75, '#c2ffd8');
+    ring.addColorStop(1, '#ffe29f');
+    ctx.lineWidth = 8;
+    ctx.strokeStyle = ring;
     ctx.stroke();
 
-    // 目盛り（5分間隔）
+    // 目盛り（カラフル）
+    const hourColors = ['#ff7ab2', '#ffa14a', '#5ad1ff', '#7ee787', '#c084fc', '#f87171'];
     for (let i = 0; i < 60; i++) {
       const ang = (Math.PI * 2) * (i / 60) - Math.PI / 2;
       const isHour = i % 5 === 0;
-      const len = isHour ? 14 : 6;
+      const len = isHour ? 16 : 6;
       ctx.beginPath();
-      ctx.lineWidth = isHour ? 3 : 1.5;
-      ctx.strokeStyle = isHour ? '#2d7ff9' : '#94a3b8';
+      ctx.lineWidth = isHour ? 3.2 : 1.4;
+      ctx.strokeStyle = isHour ? hourColors[(i/5) % hourColors.length | 0] : '#c7d2fe';
       const x1 = cx + Math.cos(ang) * (r - len);
       const y1 = cy + Math.sin(ang) * (r - len);
       const x2 = cx + Math.cos(ang) * (r - 2);
@@ -86,7 +95,7 @@
     }
 
     // 数字（1〜12）
-    ctx.fillStyle = '#13223d';
+    ctx.fillStyle = '#0f172a';
     ctx.font = `${Math.floor(r * 0.17)}px system-ui, -apple-system, Segoe UI, Roboto, Noto Sans JP, sans-serif`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
@@ -105,24 +114,43 @@
     ctx.strokeStyle = '#0a2a5e';
     ctx.lineCap = 'round';
     ctx.lineWidth = 8;
+    ctx.shadowColor = 'rgba(10,42,94,0.15)';
+    ctx.shadowBlur = 6;
     ctx.beginPath();
     ctx.moveTo(cx, cy);
     ctx.lineTo(cx + Math.cos(hAng) * (r * 0.5), cy + Math.sin(hAng) * (r * 0.5));
     ctx.stroke();
 
     // 分針
-    ctx.strokeStyle = '#2d7ff9';
+    ctx.strokeStyle = '#ff7a50';
     ctx.lineWidth = 6;
+    ctx.shadowColor = 'rgba(255,122,80,0.2)';
+    ctx.shadowBlur = 6;
     ctx.beginPath();
     ctx.moveTo(cx, cy);
     ctx.lineTo(cx + Math.cos(mAng) * (r * 0.75), cy + Math.sin(mAng) * (r * 0.75));
     ctx.stroke();
 
-    // 中心
-    ctx.fillStyle = '#ff5d5d';
+    // 中心（キャンディカラー）
+    const cap = ctx.createLinearGradient(cx - 10, cy - 10, cx + 10, cy + 10);
+    cap.addColorStop(0, '#ff7eb3');
+    cap.addColorStop(1, '#ffd166');
+    ctx.fillStyle = cap;
     ctx.beginPath();
     ctx.arc(cx, cy, 6, 0, Math.PI * 2);
     ctx.fill();
+
+    // ニコニコ顔（小さめ）
+    ctx.fillStyle = '#94a3b8';
+    ctx.beginPath();
+    ctx.arc(cx - 14, cy - 6, 2.8, 0, Math.PI * 2);
+    ctx.arc(cx + 14, cy - 6, 2.8, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = '#94a3b8';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(cx, cy + 8, 10, 0.15 * Math.PI, 0.85 * Math.PI);
+    ctx.stroke();
     ctx.restore();
   }
 
@@ -257,6 +285,16 @@
     questionEl.textContent = 'この とけい は なんじ？';
     feedbackEl.textContent = '';
     feedbackEl.className = 'feedback';
+
+    // ちょいポップアニメ
+    if (clockWrap) {
+      clockWrap.classList.remove('pop');
+      // リフローを強制してアニメ再適用
+      // eslint-disable-next-line no-unused-expressions
+      void clockWrap.offsetWidth;
+      clockWrap.classList.add('pop');
+      clockWrap.addEventListener('animationend', () => clockWrap.classList.remove('pop'), { once: true });
+    }
   }
 
   function showResult() {
